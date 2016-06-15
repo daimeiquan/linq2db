@@ -1875,13 +1875,7 @@ namespace LinqToDB.Linq.Builder
 			return p.SqlParameter;
 		}
 
-		internal static ParameterAccessor CreateParameterAccessor(
-			IDataContext        dataContext,
-			Expression          accessorExpression,
-			Expression          expression,
-			ParameterExpression expressionParam,
-			ParameterExpression parametersParam,
-			string              name)
+		internal static Expression CreateParameterExpression(IDataContext dataContext, Expression accessorExpression)
 		{
 			var type        = accessorExpression.Type;
 			var defaultType = Converter.GetDefaultMappingFromEnumType(dataContext.MappingSchema, type);
@@ -1896,6 +1890,20 @@ namespace LinqToDB.Linq.Builder
 
 			if (expr != null)
 				accessorExpression = Expression.PropertyOrField(expr.GetBody(accessorExpression), "Value");
+
+			return accessorExpression;
+			//return Expression.Convert(accessorExpression, typeof(object));
+		}
+
+		internal static ParameterAccessor CreateParameterAccessor(
+			IDataContext        dataContext,
+			Expression          accessorExpression,
+			Expression          expression,
+			ParameterExpression expressionParam,
+			ParameterExpression parametersParam,
+			string              name)
+		{
+			accessorExpression = CreateParameterExpression(dataContext, accessorExpression);
 
 			var mapper = Expression.Lambda<Func<Expression,object[],object>>(
 				Expression.Convert(accessorExpression, typeof(object)),

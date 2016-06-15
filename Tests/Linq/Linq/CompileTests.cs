@@ -78,6 +78,18 @@ namespace Tests.Linq
 		}
 
 		[Test, DataContextSource]
+		public void CompiledTestEnum(string context)
+		{
+			var query = CompiledQuery.Compile((ITestDataContext db, Gender gender) =>
+				db.Person.Where(p => p.Gender == gender));
+
+			using (var db = GetDataContext(context))
+			{
+				Assert.AreEqual(1, query(db, Gender.Male).Count());
+			}
+		}
+
+		[Test, DataContextSource]
 		public void CompiledTable1(string context)
 		{
 			var query = CompiledQuery.Compile((ITestDataContext db) =>

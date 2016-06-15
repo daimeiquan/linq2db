@@ -1792,16 +1792,19 @@ namespace Tests.Linq
 
 			using (var db = GetDataContext(context))
 			{
-				// group on client
-				var dictionary1 = db.Person
-					.AsEnumerable()
-					.GroupBy(_ => _.Gender)
-					.ToDictionary(_ => _.Key, _ => _.ToList());
-
 				// group on server
 				var dictionary2 = db.Person
 					.GroupBy(_ => _.Gender)
 					//.AsEnumerable()
+					.ToDictionary(_ => _.Key, _ => _.ToList());
+
+				var p = Gender.Male;
+
+				// group on client
+				var dictionary1 = db.Person
+					.Where(t => t.Gender == p || t.Gender != p)
+					.AsEnumerable()
+					.GroupBy(_ => _.Gender)
 					.ToDictionary(_ => _.Key, _ => _.ToList());
 
 				Assert.AreEqual(1, dictionary1.Count);

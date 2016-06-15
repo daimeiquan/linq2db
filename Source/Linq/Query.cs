@@ -1311,7 +1311,16 @@ namespace LinqToDB.Linq
 	public class ParameterAccessor
 	{
 		public Expression                       Expression;
-		public Func<Expression,object[],object> Accessor;
+
+		public Func<Expression, object[], object> Accessor
+		{
+			get { return _accessor1; }
+			set { _accessor1 = value; }
+		}
+
 		public SqlParameter                     SqlParameter;
+		Func<Expression, object[], object> _accessor;
+		Expression _expression;
+		Func<Expression, object[], object> _accessor1;
 	}
 }

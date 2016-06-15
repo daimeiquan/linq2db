@@ -260,6 +260,8 @@ namespace LinqToDB.Linq.Builder
 					var keyExpr         = context._key.BuildExpression(null, 0);
 					var dataReaderLocal = context.Builder.DataReaderLocal;
 
+//					keyExpr = ExpressionBuilder.CreateParameterExpression(context.Builder.DataContextInfo.DataContext, keyExpr);
+
 					if (!Configuration.AvoidSpecificDataProviderAPI && keyExpr.Find(e => e == dataReaderLocal) != null)
 					{
 						keyExpr = Expression.Block(
